@@ -1,0 +1,3 @@
+echo "node_modules/" >> .gitignore
+echo ".expo/" >> .gitignore
+echo ".env" >> .gitignore
