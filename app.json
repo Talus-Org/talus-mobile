@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Talus",
+    "slug": "talus-native",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F1EFE8"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.talus.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F1EFE8"
+      }
+    },
+    "plugins": ["expo-font"]
+  }
+}
