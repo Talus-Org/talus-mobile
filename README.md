@@ -44,6 +44,69 @@ npm run android
 This opens Expo Dev Tools — scan the QR code with Expo Go on your Android
 phone, or press `a` to launch in an Android emulator if you have one set up.
 
+### Android Studio & SDK Setup
+ 
+Setting up an Android emulator so `npm run android` works locally for the
+Talus mobile app.
+ 
+## Steps
+ 
+### 1. Download Android Studio
+Go to [developer.android.com/studio](https://developer.android.com/studio)
+and download the Mac version. Open the `.dmg` and drag Android Studio into
+Applications, then launch it.
+ 
+### 2. Run the setup wizard
+On first launch, choose the **Standard** install type. This downloads the
+Android SDK, an emulator system image, and other required tools
+automatically — it can take 10–20 minutes depending on your connection.
+ 
+### 3. Confirm the SDK location
+In Android Studio, go to **Settings → Languages & Frameworks → Android SDK**
+(or **Preferences** on some versions). Note the "Android SDK Location" path
+at the top — it should match:
+ 
+```
+/Users/shadgabriellereyes/Library/Android/sdk
+```
+ 
+If it's different, use that actual path in step 4 instead.
+ 
+### 4. Set `ANDROID_HOME` in your shell profile
+Open `~/.zshrc` (or `~/.bash_profile` if you use bash) and add:
+ 
+```bash
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator
+```
+ 
+### 5. Reload your shell
+Close and reopen your terminal (or run `source ~/.zshrc`), then confirm it
+worked:
+ 
+```bash
+adb --version
+```
+ 
+You should see version info instead of a "command not found" error.
+ 
+### 6. Create a virtual device (emulator)
+In Android Studio, go to **More Actions → Virtual Device Manager → Create
+Device**. Pick a phone profile (e.g. Pixel 7) and a system image (a recent
+Android version with Play Store support). Finish and let it download the
+image.
+ 
+### 7. Launch the emulator, then run the app
+Start the virtual device from the Device Manager, wait for it to fully
+boot, then from the project root run:
+ 
+```bash
+npm run android
+```
+ 
+Expo should detect the running emulator and install the app on it
+automatically.
+
 ## Building an installable Android app
 
 When you're ready for a real APK/AAB (not just Expo Go):
