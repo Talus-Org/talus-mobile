@@ -44,12 +44,10 @@ npm run android
 This opens Expo Dev Tools — scan the QR code with Expo Go on your Android
 phone, or press `a` to launch in an Android emulator if you have one set up.
 
-### Android Studio & SDK Setup
+## Android Studio & SDK Setup
  
 Setting up an Android emulator so `npm run android` works locally for the
 Talus mobile app.
- 
-## Steps
  
 ### 1. Download Android Studio
 Go to [developer.android.com/studio](https://developer.android.com/studio)
