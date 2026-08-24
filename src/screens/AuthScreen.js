@@ -3,10 +3,9 @@ import { View, Text, TextInput, Pressable, StyleSheet, Alert, ActivityIndicator 
 import { colors, fonts, spacing, radii } from '../theme';
 import { supabase } from '../lib/supabase';
 
-export default function AuthScreen() {
+export default function AuthScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
 
   async function handleSignIn() {
     if (!email) return;
@@ -17,7 +16,7 @@ export default function AuthScreen() {
       Alert.alert('Something went wrong', error.message);
       return;
     }
-    setSent(true);
+    navigation.navigate('VerifyCode', { email });
   }
 
   return (
@@ -25,28 +24,22 @@ export default function AuthScreen() {
       <Text style={styles.logo}>Talus</Text>
       <Text style={styles.headline}>Trade cards,{'\n'}not just cash.</Text>
 
-      {sent ? (
-        <Text style={styles.note}>Check {email} for a sign-in link.</Text>
-      ) : (
-        <>
-          <TextInput
-            style={styles.input}
-            placeholder="you@email.com"
-            placeholderTextColor={colors.inkDim}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <Pressable style={styles.button} onPress={handleSignIn} disabled={sending}>
-            {sending ? (
-              <ActivityIndicator color={colors.paperRaised} />
-            ) : (
-              <Text style={styles.buttonText}>Send magic link</Text>
-            )}
-          </Pressable>
-        </>
-      )}
+      <TextInput
+        style={styles.input}
+        placeholder="you@email.com"
+        placeholderTextColor={colors.inkDim}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <Pressable style={styles.button} onPress={handleSignIn} disabled={sending}>
+        {sending ? (
+          <ActivityIndicator color={colors.paperRaised} />
+        ) : (
+          <Text style={styles.buttonText}>Send code</Text>
+        )}
+      </Pressable>
     </View>
   );
 }
@@ -93,10 +86,5 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyMedium,
     fontSize: 15,
     color: colors.paperRaised,
-  },
-  note: {
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: colors.inkDim,
   },
 });
