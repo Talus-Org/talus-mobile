@@ -8,6 +8,7 @@ import { colors } from '../theme';
 import { supabase } from '../lib/supabase';
 
 import AuthScreen from '../screens/AuthScreen';
+import VerifyCodeScreen from '../screens/VerifyCodeScreen';
 import FeedScreen from '../screens/FeedScreen';
 import SearchScreen from '../screens/SearchScreen';
 import CollectionScreen from '../screens/CollectionScreen';
@@ -86,7 +87,10 @@ export default function RootNavigator() {
             />
           </>
         ) : (
-          <Stack.Screen name="Auth" component={AuthScreen} />
+          <>
+            <Stack.Screen name="Auth" component={AuthScreen} />
+            <Stack.Screen name="VerifyCode" component={VerifyCodeScreen} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
