@@ -1,35 +1,46 @@
-import { View, Text, Pressable, StyleSheet, SafeAreaView } from 'react-native';
-import { colors, fonts, spacing, radii } from '../theme';
+import { View, Text, StyleSheet } from 'react-native';
+import { Screen, ScreenHeader, Button, ThemeToggle } from '../components';
+import { useTheme } from '../theme/ThemeContext';
+import { fonts, spacing, radii } from '../theme';
 import { supabase } from '../lib/supabase';
 
 export default function ProfileScreen() {
+  const { colors } = useTheme();
+
   return (
-    <SafeAreaView style={styles.screen}>
-      <Text style={styles.header}>Profile</Text>
-      <View style={styles.placeholder}>
-        <Text style={styles.placeholderText}>
-          Showcase binder + trust score go here.
-        </Text>
+    <Screen style={{ paddingHorizontal: spacing.md }}>
+      <View style={styles.headerRow}>
+        <ScreenHeader title="Profile" style={{ paddingHorizontal: 0, paddingBottom: 0 }} />
+        <ThemeToggle />
       </View>
-      <Pressable style={styles.signOut} onPress={() => supabase.auth.signOut()}>
-        <Text style={styles.signOutText}>Sign out</Text>
-      </Pressable>
-    </SafeAreaView>
+
+      <Text style={[styles.placeholderText, { color: colors.inkDim, borderColor: colors.lineStrong }]}>
+        Showcase binder + trust score go here.
+      </Text>
+      <Button
+        label="Sign out"
+        variant="text"
+        onPress={() => supabase.auth.signOut()}
+        style={{ marginTop: spacing.md }}
+      />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper, paddingHorizontal: spacing.md },
-  header: { fontFamily: fonts.heading, fontSize: 24, color: colors.ink, paddingVertical: spacing.md },
-  placeholder: {
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: spacing.md,
+  },
+  placeholderText: {
+    fontFamily: fonts.body,
+    fontSize: 13.5,
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: colors.lineStrong,
     borderRadius: radii.md,
     padding: spacing.md,
-    marginBottom: spacing.md,
+    marginTop: spacing.md,
   },
-  placeholderText: { fontFamily: fonts.body, fontSize: 13.5, color: colors.inkDim },
-  signOut: { paddingVertical: 12, alignItems: 'flex-start' },
-  signOutText: { fontFamily: fonts.bodyMedium, fontSize: 14.5, color: colors.clay },
 });

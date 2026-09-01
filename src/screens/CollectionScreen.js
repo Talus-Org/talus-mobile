@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, SafeAreaView, FlatList, Dimensions } from 'react-native';
-import { colors, fonts, spacing, radii } from '../theme';
+import { View, FlatList, Dimensions, StyleSheet } from 'react-native';
+import { Screen, ScreenHeader, Card } from '../components';
+import { spacing } from '../theme';
 
 const { width } = Dimensions.get('window');
 const PADDING = spacing.md;
@@ -12,37 +13,21 @@ const POCKETS = Array.from({ length: 9 }, (_, i) => ({ id: String(i) }));
 
 export default function CollectionScreen() {
   return (
-    <SafeAreaView style={styles.screen}>
-      <Text style={styles.header}>Collection</Text>
-      <Text style={styles.subhead}>Binder — Page 01</Text>
+    <Screen>
+      <ScreenHeader title="Collection" subtitle="Binder — Page 01" />
       <FlatList
         data={POCKETS}
         keyExtractor={(item) => item.id}
         numColumns={COLS}
-        contentContainerStyle={{ paddingHorizontal: PADDING }}
+        contentContainerStyle={{ paddingHorizontal: PADDING, paddingBottom: 120 }}
         columnWrapperStyle={{ gap: GAP, marginBottom: GAP }}
-        renderItem={() => <View style={[styles.pocket, { width: POCKET_SIZE, height: POCKET_SIZE * 1.4 }]} />}
+        renderItem={() => (
+          <Card padded={false} style={{ width: POCKET_SIZE, height: POCKET_SIZE * 1.4 }}>
+            <View />
+          </Card>
+        )}
       />
-    </SafeAreaView>
+    </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: colors.paper },
-  header: { fontFamily: fonts.heading, fontSize: 24, color: colors.ink, paddingHorizontal: spacing.md, paddingTop: spacing.md },
-  subhead: {
-    fontFamily: fonts.body,
-    fontSize: 12,
-    color: colors.inkDim,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.sm,
-  },
-  pocket: {
-    backgroundColor: colors.paperRaised,
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: radii.sm,
-  },
-});

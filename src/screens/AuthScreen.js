@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { colors, fonts, spacing, radii } from '../theme';
+import { Text, Alert, StyleSheet } from 'react-native';
+import { Screen, Input, Button } from '../components';
+import { useTheme } from '../theme/ThemeContext';
+import { fonts, spacing } from '../theme';
 import { supabase } from '../lib/supabase';
 
 export default function AuthScreen({ navigation }) {
+  const { colors } = useTheme();
   const [email, setEmail] = useState('');
   const [sending, setSending] = useState(false);
 
@@ -20,71 +23,36 @@ export default function AuthScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.logo}>Talus</Text>
-      <Text style={styles.headline}>Trade cards,{'\n'}not just cash.</Text>
+    <Screen style={styles.screen}>
+      <Text style={[styles.logo, { color: colors.ink }]}>Talus</Text>
+      <Text style={[styles.headline, { color: colors.ink }]}>Trade cards,{'\n'}not just cash.</Text>
 
-      <TextInput
-        style={styles.input}
+      <Input
         placeholder="you@email.com"
-        placeholderTextColor={colors.inkDim}
         autoCapitalize="none"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
       />
-      <Pressable style={styles.button} onPress={handleSignIn} disabled={sending}>
-        {sending ? (
-          <ActivityIndicator color={colors.paperRaised} />
-        ) : (
-          <Text style={styles.buttonText}>Send code</Text>
-        )}
-      </Pressable>
-    </View>
+      <Button label="Send code" onPress={handleSignIn} loading={sending} />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    backgroundColor: colors.paper,
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
   },
   logo: {
     fontFamily: fonts.heading,
     fontSize: 22,
-    color: colors.ink,
     marginBottom: spacing.xl,
   },
   headline: {
     fontFamily: fonts.heading,
     fontSize: 32,
     lineHeight: 38,
-    color: colors.ink,
     marginBottom: spacing.lg,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.lineStrong,
-    backgroundColor: colors.paperRaised,
-    borderRadius: radii.sm,
-    paddingVertical: 14,
-    paddingHorizontal: spacing.sm,
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: colors.ink,
-    marginBottom: spacing.sm,
-  },
-  button: {
-    backgroundColor: colors.clay,
-    borderRadius: radii.sm,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.paperRaised,
   },
 });

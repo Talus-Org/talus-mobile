@@ -6,6 +6,7 @@ import { Rows3, Search, LayoutGrid, User } from 'lucide-react-native';
 
 import { colors } from '../theme';
 import { supabase } from '../lib/supabase';
+import GlassTabBar from './GlassTabBar';
 
 import AuthScreen from '../screens/AuthScreen';
 import VerifyCodeScreen from '../screens/VerifyCodeScreen';
@@ -21,36 +22,13 @@ const Tab = createBottomTabNavigator();
 function AppTabs() {
   return (
     <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: colors.clay,
-        tabBarInactiveTintColor: colors.inkDim,
-        tabBarStyle: {
-          backgroundColor: colors.paperRaised,
-          borderTopColor: colors.line,
-        },
-      }}
+      screenOptions={{ headerShown: false }}
+      tabBar={(props) => <GlassTabBar {...props} />}
     >
-      <Tab.Screen
-        name="Feed"
-        component={FeedScreen}
-        options={{ tabBarIcon: ({ color, size }) => <Rows3 color={color} size={size} /> }}
-      />
-      <Tab.Screen
-        name="Search"
-        component={SearchScreen}
-        options={{ tabBarIcon: ({ color, size }) => <Search color={color} size={size} /> }}
-      />
-      <Tab.Screen
-        name="Collection"
-        component={CollectionScreen}
-        options={{ tabBarIcon: ({ color, size }) => <LayoutGrid color={color} size={size} /> }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{ tabBarIcon: ({ color, size }) => <User color={color} size={size} /> }}
-      />
+      <Tab.Screen name= "Feed" component={FeedScreen} />
+      <Tab.Screen name="Search" component={SearchScreen} />
+      <Tab.Screen name="Collection" component={CollectionScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }

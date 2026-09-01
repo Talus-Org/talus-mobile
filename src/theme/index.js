@@ -1,17 +1,5 @@
-// Same tokens as src/styles/globals.css in the web app — keep these two in sync.
-export const colors = {
-  ink: '#2B2822',
-  inkDim: '#6F6A5C',
-  paper: '#F1EFE8',
-  paperRaised: '#FBFAF6',
-  line: 'rgba(43, 40, 34, 0.12)',
-  lineStrong: 'rgba(43, 40, 34, 0.22)',
-  clay: '#B5622E',
-  clayBright: '#C77340',
-  foil1: '#C9B8E8',
-  foil2: '#9FC9BC',
-  foil3: '#E8C88A',
-};
+// Tokens that don't change between light and dark mode.
+// Colors moved to ./palettes.js — use useTheme() from ./ThemeContext instead.
 
 export const fonts = {
   heading: 'Fraunces_500Medium',
