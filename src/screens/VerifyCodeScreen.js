@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { colors, fonts, spacing, radii } from '../theme';
+import { useTheme } from '../theme/ThemeContext';
+import { fonts, spacing } from '../theme';
 import { supabase } from '../lib/supabase';
 
 export default function VerifyCodeScreen({ route, navigation }) {
+  const { colors } = useTheme();
   const { email } = route.params;
   const [code, setCode] = useState('');
   const [verifying, setVerifying] = useState(false);
@@ -38,95 +40,56 @@ export default function VerifyCodeScreen({ route, navigation }) {
   }
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.logo}>Talus</Text>
-      <Text style={styles.headline}>Enter the code{'\n'}we sent you.</Text>
-      <Text style={styles.note}>Sent to {email}</Text>
+    <Screen style={styles.screen}>
+      <Text style={[styles.logo, { color: colors.ink }]}>Talus</Text>
+      <Text style={[styles.headline, { color: colors.ink }]}>Enter the code{'\n'}we sent you.</Text>
+      <Text style={[styles.note, { color: colors.inkDim }]}>Sent to {email}</Text>
 
-      <TextInput
-        style={styles.input}
+      <Input
         placeholder="123456"
-        placeholderTextColor={colors.inkDim}
         keyboardType="number-pad"
-        maxLength={6}
+        maxLength={8}
         value={code}
         onChangeText={setCode}
+        style={{ letterSpacing: 4 }}
       />
 
-      <Pressable style={styles.button} onPress={handleVerify} disabled={verifying}>
-        {verifying ? (
-          <ActivityIndicator color={colors.paperRaised} />
-        ) : (
-          <Text style={styles.buttonText}>Verify</Text>
-        )}
-      </Pressable>
+      <Button label="Verify" onPress={handleVerify} loading={verifying} />
 
-      <Pressable onPress={handleResend} disabled={resending} style={styles.resend}>
-        <Text style={styles.resendText}>
-          {resending ? 'Sending...' : "Didn't get a code? Resend"}
-        </Text>
-      </Pressable>
-    </View>
+      <Button
+        label={resending ? 'Sending...' : "Didn't get a code? Resend"}
+        variant="text"
+        onPress={handleResend}
+        disabled={resending}
+        style={styles.resend}
+      />
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
-    backgroundColor: colors.paper,
     justifyContent: 'center',
     paddingHorizontal: spacing.lg,
   },
   logo: {
     fontFamily: fonts.heading,
     fontSize: 22,
-    color: colors.ink,
     marginBottom: spacing.xl,
   },
   headline: {
     fontFamily: fonts.heading,
     fontSize: 32,
     lineHeight: 38,
-    color: colors.ink,
     marginBottom: spacing.sm,
   },
   note: {
     fontFamily: fonts.body,
     fontSize: 15,
-    color: colors.inkDim,
     marginBottom: spacing.lg,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.lineStrong,
-    backgroundColor: colors.paperRaised,
-    borderRadius: radii.sm,
-    paddingVertical: 14,
-    paddingHorizontal: spacing.sm,
-    fontFamily: fonts.body,
-    fontSize: 15,
-    color: colors.ink,
-    marginBottom: spacing.sm,
-    letterSpacing: 4,
-  },
-  button: {
-    backgroundColor: colors.clay,
-    borderRadius: radii.sm,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontFamily: fonts.bodyMedium,
-    fontSize: 15,
-    color: colors.paperRaised,
   },
   resend: {
     marginTop: spacing.lg,
     alignItems: 'center',
-  },
-  resendText: {
-    fontFamily: fonts.body,
-    fontSize: 14,
-    color: colors.inkDim,
   },
 });
