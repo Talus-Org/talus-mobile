@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
-import { Screen, Input, Button } from '../components';
+import { Screen, Input, Button, AuthShell } from '../components';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, spacing } from '../theme';
 import { supabase } from '../lib/supabase';
@@ -64,70 +64,73 @@ export default function VerifyCodeScreen({ route, navigation }) {
 
   return (
     <Screen style={styles.screen}>
-      <Text style={[styles.logo, { color: colors.ink }]}>Talus</Text>
-      <Text style={[styles.headline, { color: colors.ink }]}>Enter the code{'\n'}we sent you.</Text>
-      <Text style={[styles.note, { color: colors.inkDim }]}>Sent to {email}</Text>
+      <AuthShell>
+        <Text style={[styles.logo, { color: colors.ink }]}>Talus</Text>
+        <Text style={[styles.headline, { color: colors.ink }]}>Enter the code{'\n'}we sent you.</Text>
+        <Text style={[styles.note, { color: colors.inkDim }]}>Sent to {email}</Text>
 
-      <Input
-        placeholder="123456"
-        keyboardType="number-pad"
-        maxLength={6}
-        value={code}
-        onChangeText={(v) => {
-          setCode(v.replace(/[^\d]/g, ''));
-          if (errorMsg) setErrorMsg('');
-        }}
-        style={{ letterSpacing: 4 }}
-      />
-      {!!errorMsg && (
-        <Text style={[styles.error, { color: colors.error ?? '#B5622E' }]}>{errorMsg}</Text>
-      )}
-      {!!resendMsg && !errorMsg && (
-        <Text style={[styles.note, { color: colors.inkDim, fontSize: 13 }]}>{resendMsg}</Text>
-      )}
+        <Input
+          placeholder="123456"
+          keyboardType="number-pad"
+          maxLength={6}
+          value={code}
+          onChangeText={(v) => {
+            setCode(v.replace(/[^\d]/g, ''));
+            if (errorMsg) setErrorMsg('');
+          }}
+          style={styles.codeInput}
+        />
+        {!!errorMsg && (
+          <Text style={[styles.error, { color: colors.error ?? '#B5622E' }]}>{errorMsg}</Text>
+        )}
+        {!!resendMsg && !errorMsg && (
+          <Text style={[styles.note, { color: colors.inkDim, fontSize: 13 }]}>{resendMsg}</Text>
+        )}
 
-      <Button label="Verify" onPress={handleVerify} loading={verifying} />
+        <Button label="Verify" onPress={handleVerify} loading={verifying} />
 
-      <Button
-        label={resending ? 'Sending...' : "Didn't get a code? Resend"}
-        variant="text"
-        onPress={handleResend}
-        disabled={resending}
-        style={styles.resend}
-      />
+        <Button
+          label={resending ? 'Sending...' : "Didn't get a code? Resend"}
+          variant="text"
+          onPress={handleResend}
+          disabled={resending}
+          style={styles.resend}
+        />
+      </AuthShell>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    justifyContent: 'center',
-    paddingHorizontal: spacing.lg,
+    padding: 0,
   },
   logo: {
     fontFamily: fonts.heading,
-    fontSize: 22,
-    marginBottom: spacing.xl,
+    fontSize: 16,
+    marginBottom: spacing.xs,
   },
   headline: {
     fontFamily: fonts.heading,
-    fontSize: 32,
-    lineHeight: 38,
-    marginBottom: spacing.sm,
+    fontSize: 28,
+    lineHeight: 34,
+    marginBottom: spacing.xs,
   },
   note: {
     fontFamily: fonts.body,
     fontSize: 15,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.sm,
+  },
+  codeInput: {
+    letterSpacing: 4,
   },
   error: {
     fontFamily: fonts.body,
     fontSize: 13,
-    marginTop: spacing.xs ?? 6,
-    marginBottom: spacing.sm ?? 12,
+    marginBottom: spacing.sm,
   },
   resend: {
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
     alignItems: 'center',
   },
 });
