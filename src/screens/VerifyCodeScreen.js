@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
+import { Screen, Input, Button } from '../components';
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, spacing } from '../theme';
 import { supabase } from '../lib/supabase';
@@ -10,9 +11,17 @@ export default function VerifyCodeScreen({ route, navigation }) {
   const [code, setCode] = useState('');
   const [verifying, setVerifying] = useState(false);
   const [resending, setResending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [resendMsg, setResendMsg] = useState('');
 
   async function handleVerify() {
-    if (!code) return;
+    setErrorMsg('');
+
+    if (!/^\d{6}$/.test(code)) {
+      setErrorMsg('Enter the 6-digit code from your email.');
+      return;
+    }
+
     setVerifying(true);
     const { error } = await supabase.auth.verifyOtp({
       email,
@@ -20,8 +29,15 @@ export default function VerifyCodeScreen({ route, navigation }) {
       type: 'email',
     });
     setVerifying(false);
+
     if (error) {
-      Alert.alert('Invalid code', error.message);
+      if (/expired|invalid/i.test(error.message)) {
+        setErrorMsg('That code is incorrect or expired. Request a new one below.');
+      } else if (error.status >= 500) {
+        setErrorMsg('Trouble reaching the server. Try again in a moment.');
+      } else {
+        setErrorMsg(error.message);
+      }
       return;
     }
     // On success, the onAuthStateChange listener at the app root
@@ -29,14 +45,21 @@ export default function VerifyCodeScreen({ route, navigation }) {
   }
 
   async function handleResend() {
+    setErrorMsg('');
+    setResendMsg('');
     setResending(true);
     const { error } = await supabase.auth.signInWithOtp({ email });
     setResending(false);
+
     if (error) {
-      Alert.alert('Something went wrong', error.message);
+      if (error.status === 429 || /rate limit/i.test(error.message)) {
+        setErrorMsg('Too many attempts. Wait a bit before requesting another code.');
+      } else {
+        setErrorMsg(error.message);
+      }
       return;
     }
-    Alert.alert('Code sent', `A new code was sent to ${email}.`);
+    setResendMsg(`A new code was sent to ${email}.`);
   }
 
   return (
@@ -48,11 +71,20 @@ export default function VerifyCodeScreen({ route, navigation }) {
       <Input
         placeholder="123456"
         keyboardType="number-pad"
-        maxLength={8}
+        maxLength={6}
         value={code}
-        onChangeText={setCode}
+        onChangeText={(v) => {
+          setCode(v.replace(/[^\d]/g, ''));
+          if (errorMsg) setErrorMsg('');
+        }}
         style={{ letterSpacing: 4 }}
       />
+      {!!errorMsg && (
+        <Text style={[styles.error, { color: colors.error ?? '#B5622E' }]}>{errorMsg}</Text>
+      )}
+      {!!resendMsg && !errorMsg && (
+        <Text style={[styles.note, { color: colors.inkDim, fontSize: 13 }]}>{resendMsg}</Text>
+      )}
 
       <Button label="Verify" onPress={handleVerify} loading={verifying} />
 
@@ -87,6 +119,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 15,
     marginBottom: spacing.lg,
+  },
+  error: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    marginTop: spacing.xs ?? 6,
+    marginBottom: spacing.sm ?? 12,
   },
   resend: {
     marginTop: spacing.lg,
