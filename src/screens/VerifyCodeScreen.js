@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { Screen, Input, Button } from '../components'
 import { useTheme } from '../theme/ThemeContext';
 import { fonts, spacing } from '../theme';
 import { supabase } from '../lib/supabase';

@@ -1,29 +1,26 @@
-// Two palettes, same accent brand (gold/coral/emerald/cyan stay constant —
-// only background, surface, text, and border tokens flip between modes).
 
+// Two palettes, same accent brand — background, surface, text, and border
+// tokens flip between modes; accent colors stay constant.
+ 
 export const darkThemeColors = {
-  ink: '#FFFFFF',           // primary text (was near-black on the old light theme)
-  inkDim: '#94A3B8',        // secondary text / metadata
-  paper: '#0B132B',         // main background (deep navy / midnight blue)
-  paperRaised: '#132247',   // card & surface background (dark slate blue)
+  ink: '#FFFFFF',
+  inkDim: '#94A3B8',
+  paper: '#0A0C18',
+  paperRaised: '#151428',
   line: 'rgba(255, 255, 255, 0.08)',
   lineStrong: 'rgba(255, 255, 255, 0.16)',
  
-  clay: '#F4C430',          // primary accent — buttons, active states, CTAs (was terracotta)
-  clayBright: '#FFD166',    // pressed/hover state, lighter gold
+  clay: '#D4AF37',
+  clayBright: '#E5C866',
+  coral: '#FF5964',
+  emerald: '#10B981',
+  cyan: '#00E5FF',
  
-  coral: '#FF5964',         // secondary accent — badges, tags, highlights
-  cyan: '#00E5FF',          // data/status accent — positive indicators, trend tags
-  emerald: '#10B981',       // data/status accent — success states, card status badges
- 
-  // Kept for anything still referencing the old "foil" gradient names
-  // (e.g. binder card accents) — now mapped to the new accent trio.
   foil1: '#FF5964',
   foil2: '#00E5FF',
-  foil3: '#F4C430',
+  foil3: '#D4AF37',
 };
-
-
+ 
 export const lightThemeColors = {
   ink: '#14131F',
   inkDim: '#6B7280',
@@ -31,21 +28,19 @@ export const lightThemeColors = {
   paperRaised: '#FFFFFF',
   line: 'rgba(20, 19, 31, 0.10)',
   lineStrong: 'rgba(20, 19, 31, 0.18)',
-
-  clay: '#F4C430',
-  clayBright: '#FFD166',
-  coral: '#FF5964',
+ 
+  clay: '#D4AF37',        // primary accent
+  clayBright: '#E5C866',  // pressed/hover state of primary
+  coral: '#C5A028',       // secondary accent
   emerald: '#10B981',
   cyan: '#00E5FF',
-
-  foil1: '#FF5964',
+ 
+  foil1: '#C5A028',
   foil2: '#00E5FF',
-  foil3: '#F4C430',
+  foil3: '#D4AF37',
 };
-
-// Overlay tint used behind the glass tab bar blur — approximate paperRaised
-// at low opacity for each mode (rgba doesn't derive cleanly from hex, so
-// these are set explicitly per mode).
+ 
+// Overlay tint used behind the glass tab bar blur.
 export const glassOverlay = {
   dark: 'rgba(21, 20, 40, 0.45)',
   light: 'rgba(255, 255, 255, 0.45)',
